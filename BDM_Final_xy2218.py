@@ -38,7 +38,7 @@ def avg(x,y):
     return x/y
 avg = F.udf(avg)
 
-pattern = spark.read.csv('weekly-patterns-nyc-2019-2020-sample.csv', header=True)\
+pattern = spark.read.csv('weekly-patterns-nyc-2019-2020.csv', header=True)\
 .select('placekey','poi_cbg','visitor_home_cbgs',date_range('date_range_start'),date_range('date_range_end'))\
 .withColumnRenamed('<lambda>(date_range_start)','start').withColumnRenamed('<lambda>(date_range_end)','end')
 super = spark.read.csv('nyc_supermarkets.csv', header=True).select('safegraph_placekey').withColumnRenamed('safegraph_placekey','placekey')
@@ -79,4 +79,6 @@ for i in ['2019-10','2020-03','2020-10']:
     final = final.join(pattern, 'home_cbgs', 'full')
 
 final.saveAsTextFile('final')
+
+
 
